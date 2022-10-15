@@ -1,7 +1,12 @@
-//
-// (author:Chathumal Sangeeth)
-//
-package com.github.cozyloon.lets;
+/***************************************************************************************
+ *    Title: <Lets selenium based automation framework>
+ *    Author: <Chathumal Sangeeth>
+ *    Date: <10/15/2022>
+ *    Code version: <1.1.0>
+ *    Availability: <Maven Dependency>
+ *
+ ***************************************************************************************/
+package com.github.cozyloon;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -9,8 +14,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -29,27 +36,44 @@ import java.util.Date;
 
 public class Lets {
     static WebDriver driver;
+    static final String SCREENSHOT_PATH = "./ScreenShots/";
+
+    public Lets() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+    }
 
     public static void launchDriver(String browserType) {
         if (browserType.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
             driver.manage().window().maximize();
-        }
-        if (browserType.equalsIgnoreCase("firefox")) {
+        } else if (browserType.equalsIgnoreCase("firefox")) {
             WebDriverManager.firefoxdriver().setup();
             driver = new FirefoxDriver();
             driver.manage().window().maximize();
-        }
-        if (browserType.equalsIgnoreCase("edge")) {
+        } else if (browserType.equalsIgnoreCase("edge")) {
             WebDriverManager.edgedriver().setup();
             driver = new EdgeDriver();
             driver.manage().window().maximize();
-        }
-        if (browserType.equalsIgnoreCase("safari")) {
+        } else if (browserType.equalsIgnoreCase("safari")) {
             WebDriverManager.safaridriver().setup();
             driver = new SafariDriver();
             driver.manage().window().maximize();
+        }
+    }
+
+    public static void launchDriverWithHeadlessMode(String browserType) {
+        if (browserType.equalsIgnoreCase("chrome")) {
+            ChromeOptions options = new ChromeOptions();
+            options.setHeadless(true);
+            driver = WebDriverManager.chromedriver().capabilities(options).create();
+        }
+        if (browserType.equalsIgnoreCase("firefox")) {
+            FirefoxOptions options = new FirefoxOptions();
+            options.setHeadless(true);
+            driver = WebDriverManager.firefoxdriver().capabilities(options).create();
         }
     }
 
@@ -79,7 +103,7 @@ public class Lets {
     }
 
     public static void type(By locator, String text) {
-        WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.elementToBeClickable(locator));
         element.click();
         element.clear();
         element.sendKeys(text);
@@ -91,7 +115,7 @@ public class Lets {
         select.selectByVisibleText(text);
     }
 
-    public static void selectDrpDwnByVisibleValue(By locator, String value) {
+    public static void selectDrpDwnByValue(By locator, String value) {
         WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.elementToBeClickable(locator));
         Select select = new Select(element);
         select.selectByValue(value);
@@ -160,15 +184,15 @@ public class Lets {
 
     public static void takePageScreenShot() throws IOException {
         Screenshot screenshot = (new AShot()).shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
-        File f = new File("./ScreenShots/");
+        File f = new File(SCREENSHOT_PATH);
         Date date;
         SimpleDateFormat dateFormat;
         if (!f.exists() || !f.isDirectory()) {
-            (new File("./ScreenShots/")).mkdir();
+            (new File(SCREENSHOT_PATH)).mkdir();
         }
         date = new Date();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-        ImageIO.write(screenshot.getImage(), "jpg", new File("./ScreenShots/" + dateFormat.format(date) + ".jpg"));
+        ImageIO.write(screenshot.getImage(), "jpg", new File(SCREENSHOT_PATH + dateFormat.format(date) + ".jpg"));
     }
 
     public static void waitTillElementToBeVisible(By locator, long waitTimeInSecond) throws InterruptedException {
@@ -184,5 +208,27 @@ public class Lets {
     public static void fileUploadChooser(By locator, String filePath) {
         WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator));
         element.sendKeys(filePath);
+    }
+
+    public static void moveIntoTheIframe(By locator) {
+        WebElement iframe = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        driver.switchTo().frame(iframe);
+    }
+
+    public static void moveBackToTheParentIframe() {
+        driver.switchTo().parentFrame();
+    }
+
+    public static void moveBackFromIframe() {
+        driver.switchTo().defaultContent();
+    }
+
+    public static String getPageTitle() {
+        return driver.getTitle();
+    }
+
+    public static boolean elementIsEnabled(By locator) {
+        WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        return element.isEnabled();
     }
 }
