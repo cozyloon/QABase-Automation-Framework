@@ -11,7 +11,11 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>
@@ -35,11 +39,11 @@
             <version>1.5.4</version>
         </dependency>
     </dependencies>
-<distributionManagement>
-    <repository>
-        <id>github</id>
-        <name>Chathumal Sangeeth Apache Maven Packages</name>
-        <url>https://maven.pkg.github.com/cozyloon/QABase-Automation-Framework</url>
-    </repository>
-</distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>Chathumal Sangeeth Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/cozyloon/QABase-Automation-Framework</url>
+        </repository>
+    </distributionManagement>
 </project>
