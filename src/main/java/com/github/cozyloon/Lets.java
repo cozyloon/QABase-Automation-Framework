@@ -70,7 +70,7 @@ public class Lets {
             options.setHeadless(true);
             driver = WebDriverManager.chromedriver().capabilities(options).create();
         }
-        if (browserType.equalsIgnoreCase("firefox")) {
+        else if (browserType.equalsIgnoreCase("firefox")) {
             FirefoxOptions options = new FirefoxOptions();
             options.setHeadless(true);
             driver = WebDriverManager.firefoxdriver().capabilities(options).create();
@@ -170,7 +170,7 @@ public class Lets {
     }
 
     public static void javaScriptClick(By locator) {
-        WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.elementToBeClickable(locator));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 
