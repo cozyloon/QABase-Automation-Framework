@@ -31,7 +31,8 @@ jobs:
 
       - name: Prepare and Perform Release
         run: |
-          mvn release:prepare release:perform -B
+          set +e
+          mvn release:prepare release:perform -B || { mvn versions:set -DnewVersion=1.5.0-SNAPSHOT && mvn release:prepare release:perform -B; }
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
