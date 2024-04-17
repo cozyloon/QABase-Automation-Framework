@@ -231,4 +231,9 @@ public class Lets {
         WebElement element = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator));
         return element.isEnabled();
     }
+
+     public static File takeScreenshot(By locator) {
+        return new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator)).getScreenshotAs(OutputType.FILE);
+        
+    }
 }
