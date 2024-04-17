@@ -236,4 +236,8 @@ public class Lets {
         return new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator)).getScreenshotAs(OutputType.FILE);
         
     }
+
+       public static File takeScreenshot(By locator) {
+        return new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOfElementLocated(locator)).getScreenshotAs(OutputType.FILE); 
+    }
 }
